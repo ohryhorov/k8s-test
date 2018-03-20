@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: onboard
+  name: onboard-pod
+  namespace: default
+spec:
+  containers:
+  - image: onboard:latest
+    imagePullPolicy: Never
+    name: onboard
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config/
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    resources: {}
+  volumes:
+  - name: config-volume
+    configMap:
+      name: onboard-config
