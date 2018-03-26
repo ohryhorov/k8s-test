@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: onboard
+  name: onboard-pod
+  namespace: default
+spec:
+  containers:
+  - image: onboard:latest
+    imagePullPolicy: Never
+    name: onboard
+    env:
+     - name: CFG
+       valueFrom:
+         configMapKeyRef:
+           name: onboard-config
+           key: onboard-config.groovy
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    resources: {}
+  volumes:
+  - name: config-volume
+    configMap:
+      name: onboard-config
+      items:
+      - key: onboard-config.groovy
+        path: config-file.cfg
